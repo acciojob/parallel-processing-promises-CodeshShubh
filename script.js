@@ -7,3 +7,29 @@ const images = [
   { url: "https://picsum.photos/id/238/200/300" },
   { url: "https://picsum.photos/id/239/200/300" },
 ];
+
+function loadImage(url){
+	return new Promise((resolve , reject)=>{
+		let img = new Image();
+		img.src = url;
+		img.onload = ()=>resolve(img);
+		img.onerror =()=>reject(new Error(`Failed to
+		load image's URL: ${url}`));
+	});
+}
+
+
+function download(){
+let imagePromises = images.map(image => loadImage(image.url));
+
+	Promise.all(imagePromises).then((imgs)=>{
+		imgs.forEach(img=>{
+			output.appendChild(img);
+		});
+	}).catch((error)=>{
+		output.innerHTML +=error.message;
+	})
+	
+}
+
+	btn.addEventListener('click', download);
